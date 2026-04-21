@@ -14,9 +14,9 @@ async function main() {
     const myCore = store.get({ name: 'my-prices', valueEncoding: 'json' });
     await myCore.ready();
 
-    console.log('--- PEER AVVIATO ---');
-    console.log('Cartella:', storagePath);
-    console.log('Mia Chiave Pubblica:', b4a.toString(myCore.key, 'hex'));
+    console.log('--- Start ---');
+    console.log('Folder:', storagePath);
+    console.log('Key:', b4a.toString(myCore.key, 'hex'));
     console.log('--------------------\n');
 
     // 2. Uniamoci alla rete
@@ -25,7 +25,7 @@ async function main() {
 
     // 3. Cosa succede quando troviamo un altro peer
     swarm.on('connection', (socket) => {
-        console.log('[Rete] Connesso a un peer, scambio chiavi...');
+        console.log('[Network] Connected to a peer, key exchange...');
         
         // Sincronizza i dati
         store.replicate(socket);
@@ -37,7 +37,7 @@ async function main() {
         socket.on('data', async (data) => {
             if (data.length === 32) {
                 const remoteKey = b4a.toString(data, 'hex');
-                console.log('[Rete] Ricevuta chiave remota:', remoteKey.slice(0,6));
+                console.log('[Network] Remote key received:', remoteKey.slice(0,6));
                 
                 // Carichiamo il feed dell'altro peer
                 const otherCore = store.get({ key: data, valueEncoding: 'json' });
@@ -46,7 +46,7 @@ async function main() {
                 // Mostriamo lo storico
                 for (let i = 0; i < otherCore.length; i++) {
                     const entry = await otherCore.get(i);
-                    console.log(`[Storico] Peer ${remoteKey.slice(0,4)}: ${entry.pair} -> ${entry.price}`);
+                    console.log(`[Historic] Peer ${remoteKey.slice(0,4)}: ${entry.pair} -> ${entry.price}`);
                 }
 
                 // Ascoltiamo i nuovi prezzi in tempo reale
@@ -61,11 +61,11 @@ async function main() {
     // 4. Interfaccia per scrivere
     const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
     const ask = () => {
-        rl.question('Inserisci (es: BTC 60000): ', async (input) => {
+        rl.question('Insert (es: BTC 60000): ', async (input) => {
             const [pair, price] = input.split(' ');
             if (pair && price) {
                 await myCore.append({ pair: pair.toUpperCase(), price: price });
-                console.log('✅ Inviato nel tuo log locale');
+                console.log('✅ Send in to log local');
             }
             ask();
         });
@@ -75,6 +75,5 @@ async function main() {
 
 main();
 
-//lancia il comando node Index.js ./my-storage
-//lancia il comando node Index.js ./storage2
-//test
+//Run command node Index.js ./my-storage
+//Run command node Index.js ./storage2

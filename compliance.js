@@ -6,14 +6,13 @@ class VaultManager {
         this.totalReserves = 1000000;
     }
 
-    // Questa funzione garantisce che se chiami due volte lo stesso requestId,
-    // l'operazione non viene duplicata (Idempotenza).
+    // This function ensures that if you call the same requestId twice,
+    // the operation is not duplicated (Idempotence).
     async processMint(requestId, amount) {
         if (this.processedIds.has(requestId)) {
             return { status: 'REJECTED', reason: 'Duplicate Request ID' };
         }
 
-        // Simulazione di un controllo di sicurezza atomico
         if (amount > this.totalReserves) {
             return { status: 'REJECTED', reason: 'Insufficient Reserves' };
         }
@@ -34,7 +33,7 @@ const vault = new VaultManager();
 const reqId = "ORDER_550";
 
 async function runTest() {
-    console.log("Primo tentativo:", await vault.processMint(reqId, 5000));
-    console.log("Secondo tentativo (stesso ID):", await vault.processMint(reqId, 5000));
+    console.log("First attempt:", await vault.processMint(reqId, 5000));
+    console.log("Second attempt (same ID):", await vault.processMint(reqId, 5000));
 }
 runTest();
