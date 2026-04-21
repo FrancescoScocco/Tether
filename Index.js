@@ -77,3 +77,4 @@ main();
 
 //lancia il comando node Index.js ./my-storage
 //lancia il comando node Index.js ./storage2
+//test
