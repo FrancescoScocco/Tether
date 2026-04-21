@@ -1,0 +1,13 @@
+{
+  "name": "tether-p2p",
+  "version": "1.0.0",
+  "main": "Index.js",
+  "dependencies": {
+    "b4a": "^1.8.0",
+    "corestore": "^6.18.4",
+    "ethers": "^6.16.0",
+    "hyperbee": "^2.27.3",
+    "hypercore": "^10.38.2",
+    "hyperswarm": "^4.17.0"
+  }
+}
